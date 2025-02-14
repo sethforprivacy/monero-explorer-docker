@@ -90,7 +90,7 @@ USER monero
 
 # Switch to home directory and install newly built xmrblocks binary
 WORKDIR /home/monero
-COPY --chown=monero:monero --from=builder /root/onion-monero-blockchain-explorer/build/xmrblocks .
+COPY --chown=monero:monero --from=builder /root/onion-monero-blockchain-explorer/build/xmrblocks /usr/bin/xmrblocks
 COPY --chown=monero:monero --from=builder /root/onion-monero-blockchain-explorer/build/templates ./templates/
 
 # Expose volume used for lmdb access by xmrblocks
@@ -99,7 +99,5 @@ VOLUME /home/monero/.bitmonero
 # Expose default explorer http port
 EXPOSE 8081
 
-ENTRYPOINT ["/bin/sh", "-c"]
-
 # Set sane defaults that are overridden if the user passes any commands
-CMD ["./xmrblocks --enable-json-api --enable-autorefresh-option  --enable-pusher"]
+CMD ["xmrblocks --enable-json-api --enable-autorefresh-option  --enable-pusher"]
