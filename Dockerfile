@@ -99,5 +99,7 @@ VOLUME /home/monero/.bitmonero
 # Expose default explorer http port
 EXPOSE 8081
 
+ENTRYPOINT ["xmrblocks"]
+
 # Set sane defaults that are overridden if the user passes any commands
-CMD ["xmrblocks --enable-json-api --enable-autorefresh-option  --enable-pusher"]
+CMD ["--enable-json-api --enable-autorefresh-option  --enable-pusher"]
