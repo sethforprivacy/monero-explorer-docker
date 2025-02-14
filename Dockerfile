@@ -1,5 +1,5 @@
 # Use ubuntu:latest as base for builder stage image
-FROM ubuntu:latest as builder
+FROM ubuntu:latest AS builder
 
 # Set Monero branch/tag to be used for monerod compilation
 ARG MONERO_BRANCH=v0.18.3.4
@@ -8,7 +8,8 @@ ARG MONERO_BRANCH=v0.18.3.4
 ENV DEBIAN_FRONTEND="noninteractive"
 
 # Install dependencies for monerod and xmrblocks compilation
-RUN apt-get install -y --no-install-recommends \
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
     build-essential \
     ca-certificates \
     cmake \
@@ -65,7 +66,8 @@ RUN apt-get update \
     && apt-get upgrade -y
 
 # Install unzip to handle bundled libs from builder stage
-RUN apt-get install -y --no-install-recommends unzip \
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends unzip \
     && apt clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 COPY --from=builder /lib.zip .
