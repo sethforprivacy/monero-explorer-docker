@@ -8,9 +8,7 @@ ARG MONERO_BRANCH=v0.18.3.4
 ENV DEBIAN_FRONTEND="noninteractive"
 
 # Install dependencies for monerod and xmrblocks compilation
-RUN apt-get update \
-    && apt-get upgrade -y \
-    && apt-get install -y --no-install-recommends \
+RUN apt-get install -y --no-install-recommends \
     build-essential \
     ca-certificates \
     cmake \
@@ -28,6 +26,7 @@ RUN apt-get update \
     libunwind8-dev \
     libzmq3-dev \
     miniupnpc \
+    openssl-dev \
     pkg-config \
     zip \
     && apt clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -61,10 +60,12 @@ FROM ubuntu:latest AS final
 # Added DEBIAN_FRONTEND=noninteractive to workaround tzdata prompt on installation
 ENV DEBIAN_FRONTEND="noninteractive"
 
-# Update Ubuntu packages and install unzip to handle bundled libs from builder stage
+# Update Ubuntu packages
 RUN apt-get update \
-    && apt-get upgrade -y \
-    && apt-get install -y --no-install-recommends unzip \
+    && apt-get upgrade -y
+
+# Install unzip to handle bundled libs from builder stage
+RUN apt-get install -y --no-install-recommends unzip \
     && apt clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 COPY --from=builder /lib.zip .
