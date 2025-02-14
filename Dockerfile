@@ -59,7 +59,7 @@ RUN git clone --branch ${EXPLORER_BRANCH} \
     && cmake .. && make -j"$(cat /nproc)"
 
 # Use ldd and awk to bundle up dynamic libraries for the final image
-RUN zip /lib.zip $(ldd xmrblocks | grep -E '/[^\ ]*' -o)
+RUN zip /lib.zip $(ldd build/xmrblocks | grep -E '/[^\ ]*' -o)
 
 # Use ubuntu:latest as base for final image
 FROM ubuntu:latest AS final
