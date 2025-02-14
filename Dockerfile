@@ -54,6 +54,7 @@ RUN git clone --recursive --branch ${MONERO_BRANCH} \
 WORKDIR /root/onion-monero-blockchain-explorer
 RUN git clone --branch ${EXPLORER_BRANCH} \
     https://github.com/moneroexamples/onion-monero-blockchain-explorer.git . \
+    && mkdir build \
     && cd build \
     && cmake .. && make -j"$(cat /nproc)"
 
