@@ -4,32 +4,35 @@ FROM ubuntu:latest AS builder
 # Set Monero branch/tag to be used for monerod compilation
 ARG MONERO_BRANCH=v0.18.3.4
 
+# Set onion-monero-blockchain-explorer branch to be used for compilation
+ARG EXPLORER_BRANCH=master
+
 # Added DEBIAN_FRONTEND=noninteractive to workaround tzdata prompt on installation
 ENV DEBIAN_FRONTEND="noninteractive"
 
 # Install dependencies for monerod and xmrblocks compilation
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-    build-essential \
-    ca-certificates \
-    cmake \
-    doxygen \
     git \
+    build-essential \
+    cmake \
+    miniupnpc \
     graphviz \
+    doxygen \
+    pkg-config \
+    ca-certificates \
+    zip \
     libboost-all-dev \
-    libcurl4-openssl-dev \
-    libgtest-dev \
-    libhidapi-dev \
-    libhidapi-libusb0 \
-    libreadline-dev \
-    libsodium-dev \
     libunbound-dev \
     libunwind8-dev \
+    libssl-dev \
+    libcurl4-openssl-dev \
+    libgtest-dev \
+    libreadline-dev \
     libzmq3-dev \
-    miniupnpc \
-    openssl-dev \
-    pkg-config \
-    zip \
+    libsodium-dev \
+    libhidapi-dev \
+    libhidapi-libusb0 \
     && apt clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Set compilation environment variables
@@ -48,9 +51,11 @@ RUN git clone --recursive --branch ${MONERO_BRANCH} \
     && test -z "$NPROC" && nproc > /nproc || echo -n "$NPROC" > /nproc && make -j"$(cat /nproc)"
 
 # Copy and cmake/make xmrblocks with all available threads
-COPY . /root/onion-monero-blockchain-explorer/
-WORKDIR /root/onion-monero-blockchain-explorer/build
-RUN cmake .. && make -j"$(cat /nproc)"
+WORKDIR /root/onion-monero-blockchain-explorer
+RUN git clone --branch ${EXPLORER_BRANCH} \
+    https://github.com/moneroexamples/onion-monero-blockchain-explorer.git . \
+    && cd build \
+    && cmake .. && make -j"$(cat /nproc)"
 
 # Use ldd and awk to bundle up dynamic libraries for the final image
 RUN zip /lib.zip $(ldd xmrblocks | grep -E '/[^\ ]*' -o)
