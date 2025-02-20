@@ -13,26 +13,26 @@ ENV DEBIAN_FRONTEND="noninteractive"
 # Install dependencies for monerod and xmrblocks compilation
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-    git \
     build-essential \
-    cmake \
-    miniupnpc \
-    graphviz \
-    doxygen \
-    pkg-config \
     ca-certificates \
-    zip \
+    cmake \
+    doxygen \
+    git \
+    graphviz \
     libboost-all-dev \
-    libunbound-dev \
-    libunwind8-dev \
-    libssl-dev \
     libcurl4-openssl-dev \
     libgtest-dev \
-    libreadline-dev \
-    libzmq3-dev \
-    libsodium-dev \
     libhidapi-dev \
     libhidapi-libusb0 \
+    libreadline-dev \
+    libsodium-dev \
+    libssl-dev \
+    libunbound-dev \
+    libunwind8-dev \
+    libzmq3-dev \
+    miniupnpc \
+    pkg-config \
+    zip \
     && apt clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Set compilation environment variables
