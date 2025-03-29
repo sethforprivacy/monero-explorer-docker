@@ -2,7 +2,7 @@
 FROM ubuntu:latest AS builder
 
 # Set Monero branch/tag to be used for monerod compilation
-ARG MONERO_BRANCH=v0.18.3.4
+ARG MONERO_BRANCH=v0.18.4.0
 
 # Set onion-monero-blockchain-explorer branch to be used for compilation
 ARG EXPLORER_BRANCH=master
